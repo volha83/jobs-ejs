@@ -1,0 +1,45 @@
+{
+  "name": "jobs-ejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volha83/jobs-ejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/volha83/jobs-ejs/issues"
+  },
+  "homepage": "https://github.com/volha83/jobs-ejs#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.2",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^5.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
+    "ejs": "^4.0.1",
+    "express": "^4.22.1",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.1.0",
+    "host-csrf": "^2.0.0",
+    "mongoose": "^9.2.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^10.0.0",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.8.1"
+  }
+}
