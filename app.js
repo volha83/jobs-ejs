@@ -1,3 +1,6 @@
+const passport = require("passport");
+const passportInit = require("./passport/passportInit");
+
 const express = require("express");
 require("express-async-errors");
 
@@ -36,14 +39,22 @@ if (app.get("env") === "production") {
 
 app.use(session(sessionParms));
 
+passportInit();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(require("connect-flash")());
+
+app.use(require("./middleware/storeLocals"));
+app.get("/", (req, res) => {
+  res.render("index");
+});
+app.use("/sessions", require("./routes/sessionRoutes"));
 
 app.get("/secretWord", (req, res) => {
   if (!req.session.secretWord) {
     req.session.secretWord = "syzygy";
   }
-  res.locals.info = req.flash("info");
-  res.locals.errors = req.flash("error");
   res.render("secretWord", { secretWord: req.session.secretWord });
 });
 
@@ -71,6 +82,7 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
+    await require("./db/connect")(process.env.MONGO_URI);
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`),
     );
