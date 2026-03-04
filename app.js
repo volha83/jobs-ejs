@@ -1,3 +1,6 @@
+ //const cookieParser = require("cookie-parser");
+//  const  csrf   = require("host-csrf");
+
 const passport = require("passport");
 const passportInit = require("./passport/passportInit");
 
@@ -12,6 +15,9 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(require("body-parser").urlencoded({ extended: true }));
+
+//
+//app.use(cookieParser(process.env.SESSION_SECRET));
 
 const url = process.env.MONGO_URI;
 
@@ -44,6 +50,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(require("connect-flash")());
+
+// app.use(
+//   csrf({
+//     cookie: {
+//       sameSite: "strict",
+//     },
+//   }),
+// );
+
+// app.use((req, res, next) => {
+//   res.locals._csrf = req.csrfToken;
+//   next();
+// });
 
 app.use(require("./middleware/storeLocals"));
 app.get("/", (req, res) => {
