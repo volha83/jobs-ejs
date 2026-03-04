@@ -1,0 +1,34 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<% const isEdit = job && job._id; %>
+
+<h2><%= isEdit ? "Edit Job" : "Add Job" %></h2>
+
+<form method="POST" action="<%= isEdit ? ('/jobs/update/' + job._id) : '/jobs' %>">
+  <div>
+    <label>Company</label>
+    <input name="company" value="<%= isEdit ? job.company : '' %>" />
+  </div>
+
+  <div>
+    <label>Position</label>
+    <input name="position" value="<%= isEdit ? job.position : '' %>" />
+  </div>
+
+  <div>
+    <label>Status</label>
+    <input name="status" value="<%= isEdit ? job.status : '' %>" />
+  </div>
+
+  <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
+  <div>
+    <button><%= isEdit ? "Update" : "Create" %></button>
+    <a href="/jobs">
+      <button type="button">Cancel</button>
+    </a>
+  </div>
+</form>
+
+<%- include("partials/footer.ejs") %>
