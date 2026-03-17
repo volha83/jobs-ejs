@@ -1,11 +1,11 @@
 {
   "name": "jobs-ejs",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha tests/*.js --timeout 5000 --exit"
   },
   "repository": {
     "type": "git",
@@ -38,8 +38,14 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "chai": "^5.3.3",
+    "chai-http": "^5.1.2",
     "eslint": "^10.0.0",
+    "factory-bot": "^6.3.1",
+    "mocha": "^11.7.5",
     "nodemon": "^3.1.11",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "puppeteer": "^24.39.1"
   }
 }

@@ -30,12 +30,15 @@ app.use(
 
 // Parsers
 app.use(require("body-parser").urlencoded({ extended: true }));
-app.use(cookieParser(process.env.SESSION_SECRET)); // must be AFTER body-parser
+app.use(cookieParser(process.env.SESSION_SECRET)); 
 
-const url = process.env.MONGO_URI;
+let mongoURL = process.env.MONGO_URI;
+if (process.env.NODE_ENV === "test") {
+  mongoURL = process.env.MONGO_URI_TEST;
+}
 
 const store = new MongoDBStore({
-  uri: url,
+  uri: mongoURL,
   collection: "mySessions",
 });
 store.on("error", function (error) {
@@ -57,12 +60,12 @@ if (app.get("env") === "production") {
 
 app.use(session(sessionParms));
 
-// CSRF middleware — AFTER cookie-parser & body-parser, BEFORE routes
+// CSRF middleware 
 const csrfMiddleware = csrf.csrf();
 app.use(csrfMiddleware);
 
 app.use((req, res, next) => {
-  csrf.getToken(req, res); // sets res.locals._csrf
+  csrf.getToken(req, res); 
   next();
 });
 
@@ -73,9 +76,29 @@ app.use(passport.session());
 app.use(require("connect-flash")());
 app.use(require("./middleware/storeLocals"));
 
+app.use((req, res, next) => {
+  if (req.path === "/multiply") {
+    res.set("Content-Type", "application/json");
+  } else {
+    res.set("Content-Type", "text/html");
+  }
+  next();
+});
+
 app.get("/", (req, res) => {
   res.render("index");
 });
+
+app.get("/multiply", (req, res) => {
+  let result = req.query.first * req.query.second;
+  if (Number.isNaN(result)) {
+    result = "NaN";
+  } else if (result == null) {
+    result = "null";
+  }
+  res.json({ result });
+});
+
 
 app.use("/sessions", require("./routes/sessionRoutes"));
 
@@ -99,8 +122,8 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    await require("./db/connect")(process.env.MONGO_URI);
-    app.listen(port, () =>
+    await require("./db/connect")(mongoURL);
+    return app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`),
     );
   } catch (error) {
@@ -109,3 +132,4 @@ const start = async () => {
 };
 
 start();
+module.exports = { app };
